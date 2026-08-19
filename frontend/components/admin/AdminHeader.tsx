@@ -1,8 +1,23 @@
 'use client';
-import { Search, Bell, Menu, ChevronDown } from 'lucide-react';
+import { Search, Bell, Menu, ChevronDown, LogOut } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function AdminHeader() {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  };
+
   return (
     <header className="h-[70px] bg-white flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm border-b border-gray-100">
       <div className="flex items-center gap-4">
@@ -28,20 +43,37 @@ export default function AdminHeader() {
           </span>
         </button>
 
-        <div className="flex items-center gap-3 cursor-pointer pl-4 border-l border-gray-200">
-          <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden relative border border-gray-200">
-            <Image 
-              src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff" 
-              alt="Admin User" 
-              fill 
-              className="object-cover"
-            />
+        <div className="relative">
+          <div 
+            className="flex items-center gap-3 cursor-pointer pl-4 border-l border-gray-200"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
+            <div className="w-9 h-9 rounded-full bg-gray-200 overflow-hidden relative border border-gray-200">
+              <Image 
+                src="https://ui-avatars.com/api/?name=Admin+User&background=0D8ABC&color=fff" 
+                alt="Admin User" 
+                fill 
+                className="object-cover"
+              />
+            </div>
+            <div className="hidden md:flex flex-col">
+              <span className="text-sm font-semibold text-dark leading-none mb-1">Admin User</span>
+              <span className="text-[11px] text-gray-500 leading-none">Super Admin</span>
+            </div>
+            <ChevronDown size={14} className="text-gray-400 ml-1" />
           </div>
-          <div className="hidden md:flex flex-col">
-            <span className="text-sm font-semibold text-dark leading-none mb-1">Admin User</span>
-            <span className="text-[11px] text-gray-500 leading-none">Super Admin</span>
-          </div>
-          <ChevronDown size={14} className="text-gray-400 ml-1" />
+
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-100 py-1 z-50">
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-50 w-full text-left"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

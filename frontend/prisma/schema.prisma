@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN") // SUPER_ADMIN, ADMIN, MANAGER, EDITOR
+  status    String   @default("ACTIVE") // ACTIVE, INACTIVE
+  lastLogin DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  status      String    @default("ACTIVE") // ACTIVE, INACTIVE
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+}
+
+model Product {
+  id             String    @id @default(cuid())
+  categoryId     String
+  category       Category  @relation(fields: [categoryId], references: [id])
+  name           String
+  slug           String    @unique
+  sku            String    @unique
+  brand          String?
+  shortDesc      String?
+  description    String?
+  price          Float
+  discountPrice  Float?
+  stock          Int       @default(0)
+  status         String    @default("ACTIVE") // ACTIVE, INACTIVE
+  featured       Boolean   @default(false)
+  specifications String?   // Stored as JSON string
+  features       String?   // Stored as JSON string
+  images         ProductImage[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  orderItems     OrderItem[]
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  orderId    String      @unique // e.g., #ORD001
+  customer   String
+  amount     Float
+  status     String      @default("PENDING") // PENDING, PROCESSING, COMPLETED, CANCELLED
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  items      OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+}
+
+model Client {
+  id          String   @id @default(cuid())
+  companyName String
+  logo        String?
+  industry    String?
+  location    String?
+  description String?
+  website     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Testimonial {
+  id           String   @id @default(cuid())
+  customerName String
+  company      String?
+  position     String?
+  profileImage String?
+  rating       Int      @default(5)
+  text         String
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id             String   @id @default(cuid())
+  name           String
+  client         String?
+  industry       String?
+  location       String?
+  description    String?
+  images         String?  // JSON array of strings
+  completionDate DateTime?
+  status         String   @default("COMPLETED")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  icon        String?
+  image       String?
+  description String?
+  features    String?  // JSON array of strings
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Page {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  content          String?  // JSON string of page sections
+  seoTitle         String?
+  metaDescription  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model SiteSetting {
+  id             String   @id @default(cuid()) // Single row expected
+  companyName    String
+  logo           String?
+  favicon        String?
+  phone          String?
+  email          String?
+  whatsapp       String?
+  address        String?
+  googleMapsUrl  String?
+  facebook       String?
+  instagram      String?
+  linkedin       String?
+  youtube        String?
+  headerSettings String?  // JSON
+  footerSettings String?  // JSON
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

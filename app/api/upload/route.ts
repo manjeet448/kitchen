@@ -1,9 +1,4 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder_key';
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function POST(request: Request) {
   try {
@@ -18,28 +13,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'File size exceeds 4MB limit' }, { status: 400 });
     }
 
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    const filename = `${uniqueSuffix}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`;
+    // Convert file to Base64
+    const buffer = await file.arrayBuffer();
+    const base64 = Buffer.from(buffer).toString('base64');
+    const mimeType = file.type || 'image/jpeg';
+    const publicUrl = `data:${mimeType};base64,${base64}`;
 
-    // Upload to Supabase Storage bucket named 'uploads'
-    const { data: uploadData, error } = await supabase.storage
-      .from('uploads')
-      .upload(filename, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
-
-    if (error) {
-      console.error('Supabase upload error:', error);
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-    }
-
-    // Get public URL
-    const { data: publicUrlData } = supabase.storage
-      .from('uploads')
-      .getPublicUrl(filename);
-      
-    return NextResponse.json({ success: true, url: publicUrlData.publicUrl });
+    return NextResponse.json({ success: true, url: publicUrl });
   } catch (error) {
     console.error('Error uploading file:', error);
     return NextResponse.json({ success: false, error: 'Failed to upload file' }, { status: 500 });

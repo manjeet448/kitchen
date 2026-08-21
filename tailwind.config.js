@@ -8,8 +8,8 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#C8953D',
-          hover: '#b38230',
+          DEFAULT: '#16a34a',
+          hover: '#15803d',
         },
         dark: '#071320',
         background: '#ffffff',

@@ -28,7 +28,7 @@ export default function AdminDashboard() {
           const trendIsUp = stat.trend.includes('↑');
           
           const cardContent = (
-            <div className={`bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col hover:shadow-md transition-shadow h-full ${stat.link ? 'hover:border-gray-300' : ''}`}>
+            <div className={`bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col transition-all duration-300 h-full ${stat.link ? 'hover:shadow-lg hover:border-primary hover:-translate-y-1 active:scale-95 cursor-pointer' : 'hover:shadow-md'}`}>
               <div className="flex justify-between items-start mb-3">
                 <div className="flex items-center gap-3">
                   <div className={`p-2.5 rounded-lg ${stat.bg} ${stat.color}`}>

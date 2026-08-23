@@ -4,12 +4,13 @@ import CategoryChart from '@/components/admin/CategoryChart';
 import RecentOrders from '@/components/admin/RecentOrders';
 import RecentProducts from '@/components/admin/RecentProducts';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const stats = [
-  { label: 'Total Products', value: '156', trend: '↑ 12% from last month', icon: Package, color: 'text-yellow-500', bg: 'bg-yellow-50' },
-  { label: 'Total Categories', value: '12', trend: '↑ 8% from last month', icon: Grid, color: 'text-blue-500', bg: 'bg-blue-50' },
-  { label: 'Total Users', value: '8', trend: '↑ 15% from last month', icon: Users, color: 'text-orange-500', bg: 'bg-orange-50' },
-  { label: 'Total Orders', value: '89', trend: '↑ 20% from last month', icon: ShoppingCart, color: 'text-green-500', bg: 'bg-green-50' },
+  { label: 'Total Products', value: '156', trend: '↑ 12% from last month', icon: Package, color: 'text-yellow-500', bg: 'bg-yellow-50', link: '/admin/products' },
+  { label: 'Total Categories', value: '12', trend: '↑ 8% from last month', icon: Grid, color: 'text-blue-500', bg: 'bg-blue-50', link: '/admin/categories' },
+  { label: 'Total Users', value: '8', trend: '↑ 15% from last month', icon: Users, color: 'text-orange-500', bg: 'bg-orange-50', link: '/admin/users' },
+  { label: 'Total Orders', value: '89', trend: '↑ 20% from last month', icon: ShoppingCart, color: 'text-green-500', bg: 'bg-green-50', link: '/admin/orders' },
   { label: 'Total Revenue', value: '₹2,45,800', trend: '↑ 18% from last month', icon: DollarSign, color: 'text-yellow-500', bg: 'bg-yellow-50' },
 ];
 
@@ -25,8 +26,9 @@ export default function AdminDashboard() {
         {stats.map((stat, i) => {
           const Icon = stat.icon;
           const trendIsUp = stat.trend.includes('↑');
-          return (
-            <div key={i} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+          
+          const cardContent = (
+            <div className={`bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col hover:shadow-md transition-shadow h-full ${stat.link ? 'hover:border-gray-300' : ''}`}>
               <div className="flex justify-between items-start mb-3">
                 <div className="flex items-center gap-3">
                   <div className={`p-2.5 rounded-lg ${stat.bg} ${stat.color}`}>
@@ -38,11 +40,25 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
-              <div className="mt-1">
+              <div className="mt-auto pt-1">
                 <p className={`text-[11px] font-medium flex items-center gap-1 ${trendIsUp ? 'text-green-500' : 'text-red-500'}`}>
                   {stat.trend}
                 </p>
               </div>
+            </div>
+          );
+
+          if (stat.link) {
+            return (
+              <Link href={stat.link} key={i} className="block h-full">
+                {cardContent}
+              </Link>
+            );
+          }
+
+          return (
+            <div key={i} className="h-full">
+              {cardContent}
             </div>
           );
         })}

@@ -1,20 +1,23 @@
-import { Package, Grid, Users, ShoppingCart, DollarSign, Plus, Eye } from 'lucide-react';
+import { Package, Grid, ShoppingCart, Plus, Eye } from 'lucide-react';
 import SalesChart from '@/components/admin/SalesChart';
 import CategoryChart from '@/components/admin/CategoryChart';
 import RecentOrders from '@/components/admin/RecentOrders';
 import RecentProducts from '@/components/admin/RecentProducts';
 import Image from 'next/image';
 import Link from 'next/link';
+import prisma from '@/lib/prisma';
 
-const stats = [
-  { label: 'Total Products', value: '156', trend: '↑ 12% from last month', icon: Package, color: 'text-yellow-500', bg: 'bg-yellow-50', link: '/admin/products' },
-  { label: 'Total Categories', value: '12', trend: '↑ 8% from last month', icon: Grid, color: 'text-blue-500', bg: 'bg-blue-50', link: '/admin/categories' },
-  { label: 'Total Users', value: '8', trend: '↑ 15% from last month', icon: Users, color: 'text-orange-500', bg: 'bg-orange-50', link: '/admin/users' },
-  { label: 'Total Orders', value: '89', trend: '↑ 20% from last month', icon: ShoppingCart, color: 'text-green-500', bg: 'bg-green-50', link: '/admin/orders' },
-  { label: 'Total Revenue', value: '₹2,45,800', trend: '↑ 18% from last month', icon: DollarSign, color: 'text-yellow-500', bg: 'bg-yellow-50' },
-];
+export default async function AdminDashboard() {
+  const totalProducts = await prisma.product.count();
+  const totalCategories = await prisma.category.count();
+  const totalOrders = await prisma.order.count();
 
-export default function AdminDashboard() {
+  const stats = [
+    { label: 'Total Products', value: totalProducts.toString(), trend: 'Live Count', icon: Package, color: 'text-yellow-500', bg: 'bg-yellow-50', link: '/admin/products' },
+    { label: 'Total Categories', value: totalCategories.toString(), trend: 'Live Count', icon: Grid, color: 'text-blue-500', bg: 'bg-blue-50', link: '/admin/categories' },
+    { label: 'Total Orders', value: totalOrders.toString(), trend: 'Live Count', icon: ShoppingCart, color: 'text-green-500', bg: 'bg-green-50', link: '/admin/orders' },
+  ];
+
   return (
     <div className="flex flex-col gap-6 max-w-[1600px] mx-auto pb-10">
       <div>
@@ -22,7 +25,7 @@ export default function AdminDashboard() {
         <p className="text-gray-500 text-sm mt-1">Welcome back, Admin!</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {stats.map((stat, i) => {
           const Icon = stat.icon;
           const trendIsUp = stat.trend.includes('↑');

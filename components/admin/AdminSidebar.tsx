@@ -11,7 +11,6 @@ import { cn } from '@/utils/helper';
 const menuItems = [
   { label: 'MAIN' },
   { icon: LayoutDashboard, label: 'Dashboard', href: '/admin' },
-  { icon: Users, label: 'Users', href: '/admin/users' },
   { label: 'Product Management' },
   { icon: Grid, label: 'Categories', href: '/admin/categories' },
   { icon: Package, label: 'Products', href: '/admin/products' },

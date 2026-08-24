@@ -56,14 +56,12 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             <Link href="/quote" className="flex-1 min-w-[200px]">
               <Button variant="primary" size="lg" className="w-full">Get a Quote</Button>
             </Link>
-            <a 
-              href={`https://wa.me/917065775520?text=${encodeURIComponent(`Hi, I am interested in purchasing the *${product.name}*.\n\nProduct Link: https://frontend-3-ivory.vercel.app/products/${product.slug}\nImage: https://frontend-3-ivory.vercel.app${product.image}`)}`}
-              target="_blank" 
-              rel="noreferrer" 
+            <Link 
+              href={`/quote?productName=${encodeURIComponent(product.name)}&productImage=${encodeURIComponent(product.image)}`}
               className="flex-1 min-w-[200px]"
             >
               <Button variant="primary" size="lg" className="w-full bg-[#25D366] hover:bg-[#128C7E] border-none text-white">Purchase on WhatsApp</Button>
-            </a>
+            </Link>
             <Button variant="outline" size="lg" className="flex-1 min-w-[200px]">Download Brochure</Button>
           </div>
         </div>

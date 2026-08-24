@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Button from '@/components/common/Button';
 import { Phone, Mail, MapPin } from 'lucide-react';
@@ -15,6 +15,20 @@ export default function QuotePage() {
     category: '',
     details: ''
   });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const productName = params.get('productName');
+      const productImage = params.get('productImage');
+      if (productName) {
+        setFormData(prev => ({
+          ...prev,
+          details: `Hi, I am interested in purchasing the *${productName}*.\n\nProduct Link: https://frontend-3-ivory.vercel.app/products/${encodeURIComponent(productName.toLowerCase().replace(/ /g, '-'))}\nImage: https://frontend-3-ivory.vercel.app${productImage}\n\n`
+        }));
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

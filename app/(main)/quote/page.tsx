@@ -21,10 +21,11 @@ export default function QuotePage() {
       const params = new URLSearchParams(window.location.search);
       const productName = params.get('productName');
       const productImage = params.get('productImage');
+      const productSlug = params.get('productSlug') || (productName ? productName.toLowerCase().replace(/ /g, '-') : '');
       if (productName) {
         setFormData(prev => ({
           ...prev,
-          details: `Hi, I am interested in purchasing the *${productName}*.\n\nProduct Link: https://frontend-3-ivory.vercel.app/products/${encodeURIComponent(productName.toLowerCase().replace(/ /g, '-'))}\nImage: https://frontend-3-ivory.vercel.app${productImage}\n\n`
+          details: `Hi, I am interested in purchasing the *${productName}*.\n\nProduct Link: https://frontend-3-ivory.vercel.app/products/${productSlug}\nImage: https://frontend-3-ivory.vercel.app${productImage}\n\n`
         }));
       }
     }

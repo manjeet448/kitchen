@@ -54,7 +54,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link 
-              href={`/quote?productName=${encodeURIComponent(product.name)}&productImage=${encodeURIComponent(product.image)}`}
+              href={`/quote?productName=${encodeURIComponent(product.name)}&productImage=${encodeURIComponent(product.image)}&productSlug=${encodeURIComponent(product.slug)}`}
               className="flex-1"
             >
               <Button variant="primary" size="lg" className="w-full bg-[#25D366] hover:bg-[#128C7E] border-none text-white">Purchase on WhatsApp</Button>

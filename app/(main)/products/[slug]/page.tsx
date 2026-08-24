@@ -54,7 +54,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
           <div className="flex flex-col sm:flex-row gap-4">
             <a 
-              href={`https://wa.me/917065775520?text=${encodeURIComponent(`Hi, I am interested in purchasing the *${product.name}*.\n\nImage Reference: ${product.image}`)}`}
+              href={`https://wa.me/917065775520?text=${encodeURIComponent(`Hi, I am interested in purchasing the *${product.name}*.\n\nProduct Link: https://frontend-3-ivory.vercel.app/products/${product.slug}\nImage: https://frontend-3-ivory.vercel.app${product.image}`)}`}
               target="_blank" 
               rel="noreferrer" 
               className="flex-1"

@@ -19,7 +19,6 @@ const menuItems = [
   { label: 'Content Management' },
   { icon: UserCircle, label: 'Clients', href: '/admin/clients' },
   { icon: MessageSquare, label: 'Testimonials', href: '/admin/testimonials' },
-  { icon: Briefcase, label: 'Projects', href: '/admin/projects' },
   { icon: FileImage, label: 'Services', href: '/admin/services' },
   { icon: FileText, label: 'Pages', href: '/admin/pages' },
   { label: 'Settings' },
